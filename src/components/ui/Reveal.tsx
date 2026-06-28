@@ -1,8 +1,10 @@
 "use client";
 
-import { motion, useInView, type Variants } from "framer-motion";
+import { motion, useInView, type UseInViewOptions, type Variants } from "framer-motion";
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { SCROLL_RESTORED_EVENT } from "@/lib/scrollRestoration";
+
+type ViewportMargin = NonNullable<UseInViewOptions["margin"]>;
 
 interface RevealProps {
   children: ReactNode;
@@ -32,7 +34,7 @@ function isInViewport(el: HTMLElement, margin: string): boolean {
   return rect.top < window.innerHeight + offset && rect.bottom > -offset;
 }
 
-function useRevealVisibility(margin: string, once: boolean) {
+function useRevealVisibility(margin: ViewportMargin, once: boolean) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once, margin });
   const [restoredInView, setRestoredInView] = useState(false);
