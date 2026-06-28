@@ -1,0 +1,151 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-ivory: #fdfbf6;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-ivory text-warmgray-800 antialiased;
+    font-feature-settings: "kern";
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    @apply bg-champagne-200 text-warmgray-900;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-serif text-gold;
+    letter-spacing: -0.01em;
+  }
+
+  /* כותרות על רקע כהה — ורוד עתיק */
+  .bg-warmgray-900 :is(h1, h2, h3, h4),
+  footer :is(h1, h2, h3, h4),
+  .text-ivory :is(h1, h2, h3, h4) {
+    @apply text-rose-antique;
+    background: none;
+    -webkit-background-clip: unset;
+    background-clip: unset;
+    -webkit-text-fill-color: currentColor;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-cream;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-champagne-300 rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-champagne-400;
+  }
+}
+
+@layer components {
+  .container-lux {
+    @apply mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-12;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-7 py-3 text-sm font-medium
+      transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-champagne-400
+      focus-visible:ring-offset-2 focus-visible:ring-offset-ivory disabled:cursor-not-allowed disabled:opacity-60;
+  }
+
+  .btn-primary {
+    @apply btn bg-warmgray-900 text-ivory hover:bg-warmgray-800 hover:shadow-lux;
+  }
+
+  .btn-gold {
+    @apply btn bg-gold-sheen bg-[length:200%_auto] text-warmgray-900 hover:bg-[position:right_center]
+      shadow-soft hover:shadow-lux;
+  }
+
+  .btn-outline {
+    @apply btn border border-warmgray-300 bg-transparent text-warmgray-800 hover:border-warmgray-900
+      hover:bg-warmgray-900 hover:text-ivory;
+  }
+
+  .btn-ghost {
+    @apply btn text-warmgray-700 hover:bg-warmgray-100;
+  }
+
+  .label-overline {
+    @apply text-xs font-semibold uppercase tracking-[0.28em] text-champagne-600;
+  }
+
+  .card-hover {
+    @apply transition-all duration-500 hover:-translate-y-1 hover:shadow-lux;
+  }
+
+  /* זהב כהה — כותרות */
+  .text-gold {
+    @apply bg-gold-sheen bg-clip-text text-transparent;
+  }
+
+  /* כותרות serif נוספות (לוגו, סטטיסטיקות) */
+  .heading-gold {
+    @apply text-gold;
+  }
+
+  /* ניצוץ — רק לטקסטים מסומנים */
+  .text-gold-sparkle {
+    @apply bg-gold-sparkle bg-[length:200%_auto] bg-clip-text text-transparent animate-sparkle;
+  }
+
+  /* איפוס צבע כותרת — לשימוש כשצריך לצבוע חלקים בנפרד */
+  .heading-plain {
+    @apply text-warmgray-800;
+    background: none;
+    -webkit-background-clip: unset;
+    background-clip: unset;
+    -webkit-text-fill-color: currentColor;
+  }
+
+  .heading-rose {
+    @apply text-rose-antique;
+    background: none;
+    -webkit-background-clip: unset;
+    background-clip: unset;
+    -webkit-text-fill-color: currentColor;
+  }
+
+  /* Decorative divider */
+  .divider-gold {
+    @apply mx-auto h-px w-20 bg-gradient-to-l from-transparent via-champagne-400 to-transparent;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Subtle grain/noise overlay for premium feel */
+  .grain {
+    pointer-events: none;
+  }
+
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
