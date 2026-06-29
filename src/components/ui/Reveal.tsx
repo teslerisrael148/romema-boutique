@@ -26,20 +26,24 @@ function parseViewportMargin(margin: string): number {
   return match ? Number(match[1]) : 0;
 }
 
+type ViewportMargin = NonNullable<
+  NonNullable<Parameters<typeof useInView>[1]>["margin"]
+>;
+
 function isInViewport(el: HTMLElement, margin: string): boolean {
   const offset = parseViewportMargin(margin);
   const rect = el.getBoundingClientRect();
   return rect.top < window.innerHeight + offset && rect.bottom > -offset;
 }
 
-function useRevealVisibility(margin: string, once: boolean) {
+function useRevealVisibility(margin: ViewportMargin, once: boolean) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once, margin });
   const [restoredInView, setRestoredInView] = useState(false);
 
   const checkVisibility = useCallback(() => {
     const el = ref.current;
-    if (!el || !isInViewport(el, margin)) return;
+    if (!el || !isInViewport(el, String(margin))) return;
     setRestoredInView(true);
   }, [margin]);
 
@@ -59,7 +63,7 @@ export function Reveal({
   className,
   once = true,
 }: RevealProps) {
-  const margin = "-80px";
+  const margin = "-80px" as const;
   const { ref, visible } = useRevealVisibility(margin, once);
 
   return (
@@ -84,7 +88,7 @@ export function StaggerGroup({
   className?: string;
   stagger?: number;
 }) {
-  const margin = "-60px";
+  const margin = "-60px" as const;
   const { ref, visible } = useRevealVisibility(margin, true);
 
   return (
