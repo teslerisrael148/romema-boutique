@@ -1,8 +1,10 @@
 "use client";
 
-import { motion, useInView, type Variants } from "framer-motion";
+import { motion, useInView, type UseInViewOptions, type Variants } from "framer-motion";
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { SCROLL_RESTORED_EVENT } from "@/lib/scrollRestoration";
+
+type ViewportMargin = NonNullable<UseInViewOptions["margin"]>;
 
 interface RevealProps {
   children: ReactNode;
