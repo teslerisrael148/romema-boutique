@@ -19,7 +19,6 @@ export const siteConfig = {
     phoneHref: "tel:+972533454205",
     email: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "romyelisha132@gmail.com",
     whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_PHONE ?? "972533454205",
-    address: "רחוב הרב קוק 18, בני ברק",
     hours: [{ day: "זמינות", time: "זמינות מלאה למעט שבתות וחגים" }],
   },
 
@@ -61,7 +60,7 @@ export const shippingMethods: ShippingMethod[] = [
   {
     id: "pickup",
     name: "איסוף עצמי מהבוטיק",
-    description: "איסוף ללא עלות מהסניף בבני ברק בתיאום מראש",
+    description: "איסוף ללא עלות מהבוטיק בתיאום מראש",
     price: 0,
     estimate: "מוכן תוך 24 שעות",
   },

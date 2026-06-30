@@ -46,7 +46,7 @@ function NavigationHandlerInner() {
   const handleBack = useCallback(() => {
     const previousPath = prepareBackNavigation(currentPath);
 
-    if (previousPath) {
+    if (previousPath && previousPath !== currentPath) {
       markPendingRestore(previousPath);
       router.push(previousPath, { scroll: false });
       return;
@@ -55,8 +55,22 @@ function NavigationHandlerInner() {
     if (window.history.length > 1) {
       isPopState.current = true;
       router.back();
+      return;
     }
-  }, [currentPath, router]);
+
+    const fromParam = searchParams.get("from");
+    if (
+      fromParam &&
+      fromParam.startsWith("/") &&
+      !fromParam.startsWith("//") &&
+      fromParam !== pathname
+    ) {
+      router.push(fromParam);
+      return;
+    }
+
+    router.push("/");
+  }, [currentPath, pathname, router, searchParams]);
 
   if (pathname === "/") return null;
 

@@ -16,10 +16,12 @@ export function CheckoutView() {
   const { lines, shippingMethod, setShippingMethodId, clear, total, freeShippingEligible } =
     useCart();
   const [placed, setPlaced] = useState(false);
-  const isPickup = shippingMethod.id === "pickup";
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [notes, setNotes] = useState("");
 
   const handlePlaceOrder = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!termsAccepted) return;
     // TODO: לחבר לספק סליקה (Stripe / CardCom / Tranzila) בעת מעבר לייצור.
     setPlaced(true);
     clear();
@@ -133,43 +135,8 @@ export function CheckoutView() {
           </div>
         </Section>
 
-        {/* Address / pickup */}
-        <Section
-          step={3}
-          title={isPickup ? "פרטי איסוף עצמי" : "כתובת למשלוח"}
-        >
-          {isPickup ? (
-            <div className="rounded-2xl bg-cream p-5">
-              <div className="flex items-center gap-2 font-medium text-warmgray-900">
-                <Store size={18} className="text-champagne-600" />
-                איסוף מהבוטיק
-              </div>
-              <p className="mt-2 text-sm text-warmgray-600">
-                רחוב הרב קוק 18, בני ברק. נעדכן אותך בוואטסאפ ברגע שההזמנה מוכנה
-                לאיסוף (בדרך כלל תוך 24 שעות).
-              </p>
-            </div>
-          ) : (
-            <div className="grid gap-4 sm:grid-cols-2">
-              <Input label="עיר" required placeholder="עיר מגורים" />
-              <Input label="מיקוד" placeholder="0000000" />
-              <Input
-                label="רחוב ומספר בית"
-                required
-                placeholder="רחוב, מספר, דירה"
-                className="sm:col-span-2"
-              />
-              <Input
-                label="הערות למשלוח"
-                placeholder="קומה, קוד כניסה וכו'"
-                className="sm:col-span-2"
-              />
-            </div>
-          )}
-        </Section>
-
         {/* Payment (UI only) */}
-        <Section step={4} title="פרטי תשלום">
+        <Section step={3} title="פרטי תשלום">
           <div className="rounded-2xl border border-warmgray-200 bg-white p-5">
             <div className="flex items-center gap-2 text-sm text-warmgray-600">
               <CreditCard size={18} className="text-champagne-600" />
@@ -196,12 +163,38 @@ export function CheckoutView() {
       <div className="lg:col-span-1">
         <div className="lg:sticky lg:top-28">
           <OrderSummary>
-            <button type="submit" className="btn-gold w-full">
+            <Textarea
+              label="הערות"
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              placeholder="הערות מיוחדות, בקשות לאריזה, זמן מועדף למשלוח וכו'"
+              className="mb-4"
+            />
+            <label className="mb-4 flex cursor-pointer items-start gap-3 text-right text-sm leading-relaxed text-warmgray-600">
+              <input
+                type="checkbox"
+                checked={termsAccepted}
+                onChange={(e) => setTermsAccepted(e.target.checked)}
+                className="mt-1 h-4 w-4 shrink-0 rounded border-warmgray-300 text-champagne-600 focus:ring-champagne-400"
+              />
+              <span>
+                קראתי ואני מסכימ/ה ל
+                <Link
+                  href="/faq?from=/checkout"
+                  className="mx-1 font-medium text-champagne-700 underline underline-offset-2 hover:text-champagne-800"
+                >
+                  תנאי השימוש
+                </Link>
+                של האתר
+              </span>
+            </label>
+            <button
+              type="submit"
+              disabled={!termsAccepted}
+              className="btn-gold w-full disabled:cursor-not-allowed disabled:opacity-50"
+            >
               לתשלום {formatPrice(total)}
             </button>
-            <p className="mt-3 text-center text-xs text-warmgray-400">
-              בלחיצה על &quot;לתשלום&quot; את מאשרת את תקנון האתר
-            </p>
           </OrderSummary>
 
           {/* Mini items list */}
@@ -291,6 +284,39 @@ function Input({
         required={required}
         placeholder={placeholder}
         className="w-full rounded-xl border border-warmgray-200 bg-ivory px-4 py-2.5 text-sm outline-none transition-colors focus:border-champagne-400"
+      />
+    </label>
+  );
+}
+
+function Textarea({
+  label,
+  required,
+  placeholder,
+  className,
+  value,
+  onChange,
+}: {
+  label: string;
+  required?: boolean;
+  placeholder?: string;
+  className?: string;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+}) {
+  return (
+    <label className={cn("block", className)}>
+      <span className="mb-1.5 block text-sm font-medium text-warmgray-800">
+        {label}
+        {required ? <span className="text-blush-500"> *</span> : null}
+      </span>
+      <textarea
+        rows={3}
+        required={required}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+        className="w-full resize-y rounded-xl border border-warmgray-200 bg-ivory px-4 py-2.5 text-sm outline-none transition-colors focus:border-champagne-400"
       />
     </label>
   );

@@ -11,7 +11,7 @@ function notifyScrollRestored(): void {
 let lastTrackedPath: string | null = null;
 let pendingRestorePath: string | null = null;
 let isRestoringScroll = false;
-let restoreClearTimer: ReturnType<typeof setTimeout> | undefined;
+let restoreClearTimer: number | undefined;
 
 function safeGetItem(key: string): string | null {
   try {

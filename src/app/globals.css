@@ -128,9 +128,46 @@
   .divider-gold {
     @apply mx-auto h-px w-20 bg-gradient-to-l from-transparent via-champagne-400 to-transparent;
   }
+
+  .hero-fade-in {
+    animation: hero-fade-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .hero-fade-in-delay-1 {
+    animation-delay: 0.1s;
+  }
+
+  .hero-fade-in-delay-2 {
+    animation-delay: 0.2s;
+  }
+
+  .hero-fade-in-delay-3 {
+    animation-delay: 0.3s;
+  }
+
+  .hero-fade-in-delay-4 {
+    animation-delay: 0.5s;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-fade-in {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
 }
 
 @layer utilities {
+  @keyframes hero-fade-in {
+    from {
+      transform: translateY(28px);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
   .text-balance {
     text-wrap: balance;
   }

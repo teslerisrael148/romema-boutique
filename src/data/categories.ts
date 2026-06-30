@@ -22,6 +22,13 @@ export const categories: Category[] = [
     phoneHref: "tel:+972533454205",
     whatsapp: "972533454205",
   },
+  {
+    slug: "sale",
+    name: "סוף עונה עודפים",
+    tagline: "מבצעים",
+    description:
+      "קולקציית סוף עונה — עודפים ממלאי במחירים מיוחדים. הזדמנות לרכוש מטפחות וכיסויי ראש בעבודת יד במחיר משתלם.",
+  },
 ];
 
 export const categoryMap: Record<CategorySlug, Category> = categories.reduce(
@@ -58,5 +65,12 @@ export const featuredCategories: Category[] = [
     phone: "053-345-4205",
     phoneHref: "tel:+972533454205",
     whatsapp: "972533454205",
+  },
+  {
+    slug: "sale",
+    name: "סוף עונה עודפים",
+    tagline: "מבצעים",
+    description:
+      "קולקציית סוף עונה — עודפים ממלאי במחירים מיוחדים. הזדמנות לרכוש מטפחות וכיסויי ראש בעבודת יד במחיר משתלם.",
   },
 ];

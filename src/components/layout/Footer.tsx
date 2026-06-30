@@ -133,9 +133,12 @@ export function Footer() {
 
       <div className="relative border-t border-white/10">
         <div className="container-lux flex flex-col items-center justify-between gap-3 py-6 text-xs text-ivory/45 sm:flex-row">
-          <p>
-            © {new Date().getFullYear()} {siteConfig.name}. כל הזכויות שמורות.
-          </p>
+          <div className="text-center sm:text-start">
+            <p>
+              © {new Date().getFullYear()} {siteConfig.name}. כל הזכויות שמורות.
+            </p>
+            <p className="mt-1 text-ivory/35">נבנה על ידי ישראל טסלר</p>
+          </div>
           <div className="flex gap-5">
             <Link href="/faq" className="hover:text-ivory/80">
               מדיניות משלוחים

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
+import { Clock, Mail, MessageCircle, Phone } from "lucide-react";
 import { siteConfig, whatsappLink } from "@/lib/config";
 import { Reveal } from "@/components/ui/Reveal";
 import { ContactForm } from "@/components/contact/ContactForm";
@@ -7,7 +7,7 @@ import { ContactForm } from "@/components/contact/ContactForm";
 export const metadata: Metadata = {
   title: "צור קשר",
   description:
-    "נשמח לשמוע ממך! פרטי יצירת קשר, שעות פעילות וכתובת הבוטיק של רוממה.",
+    "נשמח לשמוע ממך! פרטי יצירת קשר ושעות פעילות של רוממה.",
 };
 
 export default function ContactPage() {
@@ -30,11 +30,6 @@ export default function ContactPage() {
         {/* Info */}
         <Reveal className="lg:col-span-2">
           <div className="space-y-4">
-            <InfoCard
-              icon={MapPin}
-              title="כתובת הבוטיק"
-              lines={[siteConfig.contact.address]}
-            />
             <InfoCard
               icon={Phone}
               title="טלפון"
@@ -87,20 +82,6 @@ export default function ContactPage() {
         </Reveal>
       </div>
 
-      {/* Map placeholder */}
-      <Reveal className="mt-10 overflow-hidden rounded-3xl">
-        <div className="relative flex h-72 items-center justify-center bg-cream">
-          <div className="text-center">
-            <MapPin size={36} className="mx-auto text-champagne-500" />
-            <p className="mt-3 font-serif text-lg text-warmgray-700">
-              {siteConfig.contact.address}
-            </p>
-            <p className="mt-1 text-sm text-warmgray-500">
-              מפה אינטראקטיבית תשולב כאן בעת העלייה לאוויר
-            </p>
-          </div>
-        </div>
-      </Reveal>
     </div>
   );
 }

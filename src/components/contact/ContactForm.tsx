@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { Check, Send } from "lucide-react";
+import { Send } from "lucide-react";
+
+const WHATSAPP_PHONE = "972533454205";
 
 export function ContactForm() {
-  const [sent, setSent] = useState(false);
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -20,29 +20,27 @@ export function ContactForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: לחבר ל-API route / Supabase / שירות מיילים בעת מעבר לייצור.
-    setSent(true);
-  };
 
-  if (sent) {
-    return (
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="flex flex-col items-center justify-center rounded-3xl bg-blush-50 p-12 text-center"
-      >
-        <span className="flex h-16 w-16 items-center justify-center rounded-full bg-champagne-500 text-white">
-          <Check size={30} />
-        </span>
-        <h3 className="mt-5 font-serif text-2xl font-semibold ">
-          ההודעה נשלחה בהצלחה!
-        </h3>
-        <p className="mt-2 text-warmgray-600">
-          תודה שפנית אלינו {form.name}. נחזור אלייך בהקדם האפשרי 💕
-        </p>
-      </motion.div>
-    );
-  }
+    const { name, phone, email, subject, message } = form;
+
+    const text = `שלום! השארתי פרטים בטופס יצירת הקשר באתר. הנה הפרטים שלי:
+👤 שם: ${name}
+📞 טלפון: ${phone}
+📧 אימייל: ${email}
+📌 נושא: ${subject}
+💬 הודעה: ${message}`;
+
+    const url = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(text)}`;
+    window.open(url, "_blank", "noopener,noreferrer");
+
+    setForm({
+      name: "",
+      email: "",
+      phone: "",
+      subject: "",
+      message: "",
+    });
+  };
 
   return (
     <form

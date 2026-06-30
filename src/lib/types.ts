@@ -3,7 +3,7 @@
 // בעתיד ל-Shopify / WooCommerce / Supabase.
 // ───────────────────────────────────────────────────────────
 
-export type CategorySlug = "long" | "meruba" | "buboim";
+export type CategorySlug = "long" | "meruba" | "buboim" | "sale";
 
 export interface Category {
   slug: CategorySlug;

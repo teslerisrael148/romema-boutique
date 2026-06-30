@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
@@ -24,9 +25,14 @@ export function Navbar() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const [shopOpen, setShopOpen] = useState(false);
   const { count, setOpen } = useCart();
   const { count: wishCount } = useWishlist();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -38,6 +44,15 @@ export function Navbar() {
   useEffect(() => {
     setMobileOpen(false);
   }, [pathname]);
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [mobileOpen]);
 
   return (
     <header
@@ -168,67 +183,72 @@ export function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile menu */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <>
-            <motion.div
-              className="fixed inset-0 z-50 bg-warmgray-900/40 backdrop-blur-sm lg:hidden"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setMobileOpen(false)}
-            />
-            <motion.aside
-              className="fixed inset-y-0 right-0 z-50 flex w-[82%] max-w-sm flex-col bg-ivory p-6 shadow-lux lg:hidden"
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "tween", duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <div className="mb-6 flex items-center justify-between">
-                <span className="font-serif text-2xl font-bold heading-gold">
-                  {siteConfig.name}
-                </span>
-                <button
-                  onClick={() => setMobileOpen(false)}
-                  aria-label="סגירה"
-                  className="rounded-full p-2 text-warmgray-700 hover:bg-warmgray-100"
-                >
-                  <X size={22} />
-                </button>
-              </div>
-
-              <nav className="flex flex-col gap-1">
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className="rounded-xl px-4 py-3 text-lg font-medium text-warmgray-800 transition-colors hover:bg-blush-50 hover:text-champagne-700"
+      {/* Mobile menu — portaled to body so header backdrop-blur doesn't break fixed positioning */}
+      {mounted
+        ? createPortal(
+            <AnimatePresence>
+              {mobileOpen && (
+                <>
+                  <motion.div
+                    className="fixed inset-0 z-[100] bg-warmgray-900/40 backdrop-blur-sm lg:hidden"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    onClick={() => setMobileOpen(false)}
+                  />
+                  <motion.aside
+                    className="fixed inset-y-0 right-0 z-[100] flex w-[82%] max-w-sm flex-col overflow-y-auto bg-ivory p-6 shadow-lux lg:hidden"
+                    initial={{ x: "100%" }}
+                    animate={{ x: 0 }}
+                    exit={{ x: "100%" }}
+                    transition={{ type: "tween", duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                   >
-                    {link.label}
-                  </Link>
-                ))}
-              </nav>
+                    <div className="mb-6 flex items-center justify-between">
+                      <span className="font-serif text-2xl font-bold heading-gold">
+                        {siteConfig.name}
+                      </span>
+                      <button
+                        onClick={() => setMobileOpen(false)}
+                        aria-label="סגירה"
+                        className="rounded-full p-2 text-warmgray-700 hover:bg-warmgray-100"
+                      >
+                        <X size={22} />
+                      </button>
+                    </div>
 
-              <div className="mt-6 border-t border-warmgray-200 pt-6">
-                <p className="label-overline mb-3">קטגוריות</p>
-                <div className="flex flex-col gap-1">
-                  {categories.map((c) => (
-                    <Link
-                      key={c.slug}
-                      href={`/shop?category=${c.slug}`}
-                      className="rounded-lg px-4 py-2 text-sm text-warmgray-600 hover:text-champagne-700"
-                    >
-                      {c.name}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </motion.aside>
-          </>
-        )}
-      </AnimatePresence>
+                    <nav className="flex flex-col gap-1">
+                      {navLinks.map((link) => (
+                        <Link
+                          key={link.href}
+                          href={link.href}
+                          className="rounded-xl px-4 py-3 text-lg font-medium text-warmgray-800 transition-colors hover:bg-blush-50 hover:text-champagne-700"
+                        >
+                          {link.label}
+                        </Link>
+                      ))}
+                    </nav>
+
+                    <div className="mt-6 border-t border-warmgray-200 pt-6">
+                      <p className="label-overline mb-3">קטגוריות</p>
+                      <div className="flex flex-col gap-1">
+                        {categories.map((c) => (
+                          <Link
+                            key={c.slug}
+                            href={`/shop?category=${c.slug}`}
+                            className="rounded-lg px-4 py-2 text-sm text-warmgray-600 hover:text-champagne-700"
+                          >
+                            {c.name}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  </motion.aside>
+                </>
+              )}
+            </AnimatePresence>,
+            document.body,
+          )
+        : null}
     </header>
   );
 }

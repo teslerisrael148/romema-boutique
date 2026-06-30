@@ -4,6 +4,7 @@ import "./globals.css";
 import { siteConfig } from "@/lib/config";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { AccessibilityWidget } from "@/components/accessibility/AccessibilityWidget";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { NavigationHandler } from "@/components/NavigationHandler";
 import { Providers } from "@/components/Providers";
@@ -66,6 +67,7 @@ export default function RootLayout({
           <Navbar />
           <main className="flex-1">{children}</main>
           <Footer />
+          <AccessibilityWidget />
           <WhatsAppButton />
         </Providers>
       </body>
